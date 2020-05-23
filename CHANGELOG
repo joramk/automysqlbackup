@@ -2,6 +2,10 @@
 # Change Log
 #=====================================================================
 #
+# version 3.0_rc6 - (2020-05-23)
+#     - Hack for public-key encryption added.
+# version 3.0_rc6 - information missing
+# version 3.0_rc5 - information missing
 # version 3.0_rc4 - (2011-11-24)
 #     - Removing mkfifo commands, thereby improving portability.
 #     - Fixing not working table exclude feature for wildcards.
