@@ -406,7 +406,7 @@ echo
 
 precheck_files=( automysqlbackup 79f1c426473ce119602d8584170d87b3
 automysqlbackup.conf d525efa3da15ce9fea96893e5a8ce6d5
-README b17740fcd3a5f8579b907a42249a83cd
+README eb8bd1634ae9e515908d32524c3c0f70
 LICENSE 39bba7d2cf0ba1036f2a6e2be52fe3f0
 )
 
