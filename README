@@ -170,28 +170,40 @@ Please take a look at the supplied "automysqlbackup.conf" for information about 
 .. ENCRYPTION
 -------------------------
 
-You can enable the hack with random keys and use of public key encryption for the file containing the random key to decrypt
-by using a public key certificate file as encryption password. The file extension must be ".crt".
+For additional security this version has been modified to use public-key encryption
+with random generated backup passwords. The passwords are encrypted and stored in
+additional files created during backup. These key files contain unique passwords
+for each backup file. Using public-key encrpytion for the key-files only the owner
+of the corresponding private key can decrypt the backup.
 
-In order to retrieve the password used for encryption you now have to decrypt the ".key.enc" file containing the encryption key before.
+You can enable the hack with random key and use of public key encryption by using
+a public key certificate instead of an encryption password in the configuration.
+The file extension must be ".crt" otherwise it will be handled like a password.
 
-To decrpyt the key file run, afterwards you can use the password the decrypt the file:
+CONFIG_encrypt_password='/path/to/publickey.crt'
 
-openssl rsautl -decrypt -inkey privkey.pem -in encrypted_file_name(ex: *.bz2.key.enc) -out keyfilename.key
+In order to retrieve the password used for encryption you now have to decrypt
+the ".key.enc" file containing the encryption key first.
+
+To decrypt the key file run (afterwards you can use the password retrieved to decrypt the SQL file):
+
+openssl rsautl -decrypt -inkey privkey.pem -in encrypted_file_name(ex: *.sql.bz2.key.enc) -out keyfilename.key
 
 To decrypt run (replace bz2 with gz if using gzip):
 
-openssl enc -aes-256-cbc (-pbkdf2 -iter 100000) -d -in encrypted_file_name(ex: *.enc.bz2) -out outputfilename.bz2 -pass pass:PASSWORD-USED-TO-ENCRYPT
+openssl enc -aes-256-cbc -pbkdf2 -iter 100000 -d -in encrypted_file_name(ex: *.sql.enc.bz2) -out outputfilename.sql.bz2 -pass pass:PASSWORD-USED-TO-ENCRYPT
 
-or when you have the .key file
+or when you have a .key file containing the password:
 
-openssl enc -aes-256-cbc (-pbkdf2 -iter 100000) -d -in encrypted_file_name(ex: *.enc.bz2) -out outputfilename.bz2 -pass file:keyfilename.key
+openssl enc -aes-256-cbc -pbkdf2 -iter 100000 -d -in encrypted_file_name(ex: *.sql.enc.bz2) -out outputfilename.sql.bz2 -pass file:keyfilename.key
 
 or everything as one-liner:
 
 openssl enc -aes-256-cbc -pbkdf2 -iter 100000 -d -in infile.bz2.enc -out outfile.bz2 -pass pass:"$(openssl rsautl -decrypt -inkey privatekeyfile.key -in infile.key.enc -out '/dev/stdout')"
 
-For enhanced security PBKDF2 with 100.000 iterations is used automatically when OpenSSL v1.1.1 or higer is used.
+Please note: For enhanced security PBKDF2 with 100.000 iterations is automatically
+used when OpenSSL v1.1.1 or higer is detected. Please modify your commands
+accordingly and remove the parameter -pbkdf2 and -iter if necessary.
 
 
 
