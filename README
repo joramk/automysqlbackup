@@ -173,7 +173,7 @@ Please take a look at the supplied "automysqlbackup.conf" for information about 
 For additional security this version has been modified to use public-key encryption
 with random generated backup passwords. The passwords are encrypted and stored in
 additional files created during backup. These key files contain unique passwords
-for each backup file. Using public-key encrpytion for the key-files only the owner
+for each backup file. Using public-key encryption for the key-files only the owner
 of the corresponding private key can decrypt the backup.
 
 You can enable the hack with random key and use of public key encryption by using
